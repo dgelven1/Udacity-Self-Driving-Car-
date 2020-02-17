@@ -7,10 +7,10 @@
 
 My pipeline consisted of 5 steps. 
 
-1. I converted the original image into grayscale
+1. The original image was converted to grayscale
 <img src="examples/gray_img.jpg" width="480" alt="Combined Image" />
 
-2. I smooth the grayscale image using a Gaussian filter using a kernal size of 5
+2. The grayscale was then smoothed using a Gaussian filter using a kernal size of 5
 <img src="examples/gray_img.jpg" width="480" alt="Combined Image" />
 
 
@@ -19,10 +19,10 @@ low and high thresholds respectively.
 <img src="examples/canny_img.jpg" width="480" alt="Combined Image" />
 
 
-4. A region of interest was defined to mask any unwanted edges outside of the defined trapezoid shape. 
+4. A region of interest was defined to mask any unwanted edges outside of my defined trapezoid shape. 
 <img src="examples/roi_img.jpg" width="480" alt="Combined Image" />
 
-5. The Hough transform was used to find line segments within the region of interest image. The line segments were then passed to the draw_lines function.Here, the slope and intercepts were calculated for each line segment present in the ROI. It was determined that negative slopes were left lines and positive slopes were right lines. Some conditions were set for the calculated slope and intercept values to ensure only line segments of the actual line markers were considered. The average slope and intercept was then calculated for the left and right line. These average values were used to extrapolate the line from the bottom of the image to a predetermined point approximately half the height of the image. 
+5. The Hough transform was used to find line segments within the region of interest image. The line segments were then passed to the draw_lines function.Here, the slope and intercepts were calculated for each line segment present in the ROI. It was determined that negative slopes were left lines and positive slopes were right lines. Some conditions were set for the calculated slope and intercept values to ensure only line segments clost to the actual line markers were considered. The average slope and intercepts were then calculated for the left and right line segments. These average values were used to extrapolate the line from the bottom of the image to a predetermined point approximately half the height of the image. 
 <img src="examples/hough_img.jpg" width="480" alt="Combined Image" />
 
 6. The lines drawn from the Hough transform are now overlayed on top of the original image. 
@@ -41,3 +41,10 @@ Another shortcoming would be if there are multiple potential line markers in the
 A possible improvement would be to add a filtering function to smooth the transition between slope and intercept calculations per frame. 
 
 Another potential improvement could be to include a nonlinear curve to draw the line markers. This would allow for better performance while detecting line markers with increasing curvatures. 
+
+### Video Ouputs
+Solid White Line Right
+<video src="test_videos_output/solidWhiteRight.mp4" width="320" height="200" controls preload></video>
+
+Solid Yellow Line Left
+<video src="test_videos_output/solidYellowLeft.mp4.mp4" width="320" height="200" controls preload></video>
