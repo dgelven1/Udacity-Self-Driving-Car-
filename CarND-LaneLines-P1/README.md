@@ -42,9 +42,3 @@ A possible improvement would be to add a filtering function to smooth the transi
 
 Another potential improvement could be to include a nonlinear curve to draw the line markers. This would allow for better performance while detecting line markers with increasing curvatures. 
 
-### Video Ouputs
-Solid White Line Right
-<video src="test_videos_output/solidWhiteRight.mp4" width="320" height="200" controls preload></video>
-
-Solid Yellow Line Left
-<video src="test_videos_output/solidYellowLeft.mp4.mp4" width="320" height="200" controls preload></video>
