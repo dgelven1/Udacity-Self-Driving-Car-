@@ -174,10 +174,10 @@ This resulted in the following source and destination points:
 
 | Source        | Destination   | 
 |:-------------:|:-------------:| 
-| 280, 720      | 250, 720        | 
-| 595, 450      | 250, 0      |
-| 725, 450     | 1000, 0      |
-| 1125, 720      | 1000, 720        |
+| 280, 720      | 300, 720        | 
+| 590, 450      | 300, 0      |
+| 700, 450     | 1000, 0      |
+| 1100, 720      | 1000, 720        |
 
 Once both the source and destination points are obtained, the `cv2.getPerspectiveTransform` function is used. This functions returns the transformed image, and the perspective and inverse perspective matricies. 
 
