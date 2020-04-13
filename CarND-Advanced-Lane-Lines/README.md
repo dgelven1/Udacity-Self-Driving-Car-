@@ -36,7 +36,7 @@
 
 I used two python notebook files for this project. The 'AdvancedLaneFinding.ipynb' file is split into different cells to help visualize the outputs of each function. I will refer to this notebook when explaining the steps below. The other notebook, 'Project2_Final.ipynb', was used to run the entire image processing pipeline with the output video as its only output. 
 
-[Link to AdvancedLaneFinding.ipynb](./AdvanceLaneFinding.ipynb)
+[Link to AdvancedLaneFinding.ipynb](./AdvancedLaneFinding.ipynb)
 
 
 ## Project Steps:
