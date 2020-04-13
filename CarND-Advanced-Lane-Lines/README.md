@@ -36,7 +36,8 @@
 
 I used two python notebook files for this project. The 'AdvancedLaneFinding.ipynb' file is split into different cells to help visualize the outputs of each function. I will refer to this notebook when explaining the steps below. The other notebook, 'Project2_Final.ipynb', was used to run the entire image processing pipeline with the output video as its only output. 
 
-[Link to AdvancedLaneFinding.ipynb]: (./AdvanceLaneFinding.ipynb)
+[Link to AdvancedLaneFinding.ipynb](./AdvanceLaneFinding.ipynb)
+
 
 ## Project Steps:
 The steps I used to create my final image processing pipeline are as follows:
@@ -297,7 +298,7 @@ I chose to output the overall lane curvature, which is the average curvature bet
 
 ![alt text][image18]
 
-Here's a [link to my video result](./project_video.mp4)
+Here's a [link to my video result](./project_video_output.mp4)
 
 # Discussion 
 
