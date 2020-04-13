@@ -22,17 +22,21 @@
 [image16]: ./output_images/Search_around_img.png "Search Around"
 [image17]: ./output_images/Overlay_img.png "Color Overlay"
 [image18]: ./output_images/Final_img.png "Final Output Image"
-[image19]: ./output_images/First_image.png "Header Image"
+
 
 [video1]: ./project_video_output.mp4 "Video"
 
-![alt text][image19]
+![alt text][image18]
 
 
 ## Overview 
 ---
 
-The goal for this project was to identify functions to use for an image processing pipeline to accurately detect road line markings. In the next section I will explain each function I explored and the to help create my final image processing class. 
+#### The goal for this project was to create an image processing pipeline to accurately detect road lane markings. In the next sections I will explain each step and functions I explored to create my final image processing class. 
+
+I used two python notebook files for this project. The 'AdvancedLaneFinding.ipynb' file is split into different cells to help visualize the outputs of each function. I will refer to this notebook when explaining the steps below. The other notebook, 'Project2_Final.ipynb', was used to run the entire image processing pipeline with the output video as its only output. 
+
+[Link to AdvancedLaneFinding.ipynb]: (./AdvanceLaneFinding.ipynb)
 
 ## Project Steps:
 The steps I used to create my final image processing pipeline are as follows:
@@ -50,14 +54,16 @@ The steps I used to create my final image processing pipeline are as follows:
 
 ## Step 1. Camera Calibration
 
-#### The goal of camera calibration is to ensure that the image going through the image processing pipeline is accurate and does not contain any distortion. This is important for accurately determining a vehicles position in world coordinates based on a given image. 
+#### The goal of camera calibration is to ensure that the image going through the image processing pipeline is accurate and does not contain any distortion. This is important for accurately determining a vehicle's position and lane curvature.
 
-In this project, we were provided an folder of chessboard images to use for camera calibration located in `/camera_cal`
+`Found in Cell 1 of AdvancedLaneFinding.ipynb`
+
+In this project, we were provided a folder of chessboard images to use for camera calibration located in `/camera_cal`
 
 Using these images, the first step was to manually define a set of object points that would be used for each seperate image in the set of chessboard images. 
 
 Next, for each image the function went through the following steps:
-1. Read the image using 'cv2.imread'. 
+1. Read the image using `cv2.imread`. 
 2. Convert the image to gray scale using `cv2.cvtColor(img, cv2.COLOR_BG@GRAY)`
 3. Find the corners in the checkerboard image using `cv2.findChessboardCorners()`
 4. Create a list of the image corner points to be used in my undistortion function. 
@@ -68,10 +74,12 @@ This function then returns two lists: object points and image points.
 
 ## Step 2. Apply Distortion Correction
 
-For image distortion correction I defined a function that took an image as input and the object and image points from the camera calibration.
+`Found in Cell 2 of AdvancedLaneFinding.ipynb`
+
+For image distortion correction, I defined a function that took an image as input along with the object and image points from the camera calibration function above.
 
 The function includes two steps to apply distortion correction:
-1. Call the `cv2.calibrateCamera` using the object and image points from the previous function. This function returns the camera matrix, distortion coefficients, rotation and translation vectors, which will then be used in the next step. 
+1. Call the `cv2.calibrateCamera` using the object and image points as arguments. This function returns the camera matrix, distortion coefficients, rotation and translation vectors, which will then be used in the next step. 
 2. The matrices and vectors obtained from above are then used in the `cv2.undistort()` function to apply distortion correction to the input image. 
     
 ```python
@@ -81,20 +89,25 @@ def undist_img(img, objpoints, imgpoints):
     undist = cv2.undistort(img, mtx, dist, None, mtx)
     return undist
 ```
+
+Output from the `undist_img()` function:
+
 ![alt text][image1]
 
 ## Step 3. Create a Threshold Binary Image
 
-The goal for this step was to determine which threshold strategy would work best for creating a combined binary image of edges in the scene. 
+`Code found in Cells 6-15 of AdvancedLaneFinding.ipynb`
 
-I used five different strategies and functions to create individual binary images:
+With an undistored image, the next step was to determine the lane edges within an image. This was accomplished by creating a binary image of the edges detected. I needed to determine the best strategy to detect lane markings in a variety of different environmental and lighting conditions. 
 
-Using the `cv2.Sobel()` function I was able to find:
+I used five different strategies and functions to find edges and lane markings:
+
+For the first three strategies, I used the `cv2.Sobel()` function to find:
 1. Direction gradient in the x and y directions
 2. Magnitude gradient
 3. Directional gradient
     
-Extracting the different image color information:
+The last two strategies, I extracted the image color information:
 1. Hue, Lightness, and Saturation color space of the image: 
 - Using `hls = cv2.cvtColor(img, cv2.COLOR_RGB2HLS)` to convert the image to the HLS color channel. 
 2. Extracting the R color space:
@@ -130,26 +143,41 @@ def combined_threshold(img):
 
 ## Step 4. Apply Region of Interest
 
+`Code found in Cell 5 of AdvancedLaneFinding.ipynb`
+
 Once the combined binary image is created, the next step in my image processing pipeline was to apply a region of interest to filter out any unwanted edges in the image. 
 
 I used a similar region of interest function that was used in the first project. I defined a trapezoid like shape in the original image and created a new blank image of zeros by creating a mask. 
-`mask = np.zeros_like(img)`
+- `mask = np.zeros_like(img)`
 
-This allows me to fill the blank image with the trapezoid shape:
-`cv2.fillPoly(mask, [vertices], ignore_mask_color)`
+This allowed me to fill the blank image with the trapezoid shape with an arbitrary color:
+- `cv2.fillPoly(mask, [vertices], ignore_mask_color)`
 
-Now, we can compare the original combined binary image to the the trapezoid image and only allow values in the image that are non-zero at the same indicies, which will provide only pixels within the trapezoid. This comparison using:
-`masked_image = cv2.bitwise_and(img, mask)`
+Next, I compared the original combined binary image to the the trapezoid image and only allowed values in the image that are non-zero at the same indicies, which will provide only pixels within the trapezoid. This comparison was completed using:
+- `masked_image = cv2.bitwise_and(img, mask)`
 
 ![alt text][image12]
 
-## Step 5. Apply Perspective Transform 
+## Step 5. Apply Perspective Transform
+
+`Code found in Cell 17 of AdvancedLaneFinding.ipynb`
+
 
 The next step in the pipeline is to apply a perspective transform (bird's eye view) . 
 
 This transform is completed by manually selecting the coordinates cooresponding to the shape of the lane in the original image. These coordinates are known as the source points.
 
-Next, step is to define destination points where the source points will be transformed too. Since we want a bird eye view of the lane, we want the destination points to be a rectangle. This will help with fitting a line to the lane markings and detecting curvature on the road. 
+Next, step is to define destination points where the source points will be transformed too. Since I want a bird eye view of the lane, I want the destination points to be a rectangle. This will help with fitting a line to the lane markings and detecting curvature on the road.
+
+The final source and destination points used:
+This resulted in the following source and destination points:
+
+| Source        | Destination   | 
+|:-------------:|:-------------:| 
+| 280, 720      | 250, 720        | 
+| 595, 450      | 250, 0      |
+| 725, 450     | 1000, 0      |
+| 1125, 720      | 1000, 720        |
 
 Once both the source and destination points are obtained, the `cv2.getPerspectiveTransform` function is used. This functions returns the transformed image, and the perspective and inverse perspective matricies. 
 
@@ -157,6 +185,8 @@ Once both the source and destination points are obtained, the `cv2.getPerspectiv
 ![alt text][image13]
 
 ## Step 6. Find the Lane Pixels
+
+`Code found in Cell 21 of AdvancedLaneFinding.ipynb`
 
 In order to find the initial pixels in a given image, the following steps were used:
 
@@ -166,11 +196,11 @@ In order to find the initial pixels in a given image, the following steps were u
 
 2. Define the shape of a search box based on the image dimensions. Two search seperate sets of search boxes are used to find the left and right lanes respectively. The left search box is placed at the maximum value of the histogram on the left side of the midpoint. The right search box is placed in the same method on the right side of the midpoint. 
 
-3. A sliding window method is used to find the cooresponding lane pixels. The function searches for pixels within each 'sliding window'. If the number of pixels within the window meet the minimum threshold, then indicies of each pixel is added to an array. This array is then averaged and used for the horizontal position of the next sliding window. This process is done until the entire vertical axis of the image is covered. 
+3. A sliding window method is used to find the cooresponding lane pixels. The function searches for pixels within each 'sliding window'. If the number of pixels within the window meets the minimum threshold, then indicies of each pixel is added to an array. This array is then averaged and used for the horizontal position of the next sliding window. This process is done until the entire vertical axis of the image is covered. 
 
-4. Now that the lane pixels have been identified. A second order polynomial, `np.polyfit`, is used to calculate the line of best fit between all of the pixels found via the sliding window method. 
+4. Now that the lane pixels have been identified. A second order polynomial, `np.polyfit`, is used to calculate the line of best fit between all of the pixels found via the sliding window method for the left and right lanes. 
 
-This function is not very cost efficient and could cause problems in line detection if used for every frame of a video. To maximize effciency, this function is only used at the very beginning of a video, or if the lines have been lost completely. 
+This function is not very efficient and could cause problems in line detection if used for every frame of a video. To maximize effciency, this function is only used at the very beginning of a video, or if the lines have been lost completely. 
     
 In order to only call this function when needed, it is called within the search_around_poly function, which I will describe in the next section. 
    
@@ -178,15 +208,20 @@ In order to only call this function when needed, it is called within the search_
 
 ## Step 6.1 Detect Similar Lane Pixels
 
-Since lanes do not jump around randomly, the assumption can be made that the lines will remain in the relative location where they have already been detected. For this reason, a function was defined to search around the already existing polynomial to find the next line marking in the frame. 
+`Code found in Cell 22 of AdvancedLaneFinding.ipynb`
 
-This function defines a margin area to search around the exisiting polynomial and will redraw a new polynomial once an new line marking is found. 
+Since lanes do not jump around randomly, the assumption can be made that the lines will follow the same relative path which is already being track. For this reason, a function was defined to search around the already existing polynomial to find the next line marking in the frame. 
+
+The function `search_around_poly()` defines a marginal area to search around the exisiting polynomial and will redraw a new polynomial once an new line marking is found. 
 
 ![alt text][image16]
 
 ## Step 7. Determine Lane Curvature and Vehicle Position
 
-Now that the left and right line markings and polynomials have been calculated, this information can be used to determine the overall lane curvature and vehicle position relative to the lane center. 
+`Code found in Cells 23 & 24 of AdvancedLaneFinding.ipynb`
+
+
+Now that the left and right line markings have been identified and polynomials have been calculated, this information can be used to determine the overall lane curvature and vehicle position relative to the lane center. 
 
 To transform coordinates from camera to world values, I used the conversions used in the Advanced Computer Vision lesson and assumed the following (x,y) pixel to meter factors:
 
@@ -195,24 +230,24 @@ y pixel -> meter = 30/720
 
 #### Determine Lane Curvature:
 
-I used the use the equation from the second order polynomial of the left and right lines to calculate the radius of each poly nomial:
+I used the equation for a second order polynomial to calculate the radius of the left and right polynomials. The following equations were used:
 
 Second Order Polynomial = f(y) = Ay^2 + By + C 
 
 Radius of curvature at any point x of function x = f(x) = Rcurve = ([1 + (dx/dy)^2]^3/2)/|d^2x/dy^2|
 
-first derivative f'(y) = 2Ay + B
-second derivative f''(y) = 2A
+First derivative f'(y) = 2Ay + B
+Second derivative f''(y) = 2A
 
 Radius of curvature = ([1 + (2Ay + B)^2]^3/2)/|2A^2|
 
-To apply the conversion, the x and y factor are applied to the left and right line indicies then used to recalculate the polynomial coefficients using `np.polyfit`. The coefficients are then used to calculate the radius as shown above. 
+To apply the conversion, the x and y factor are applied to the left and right line indicies, then used to recalculate the polynomial coefficients using `np.polyfit`. The coefficients are then used to calculate the radius as shown above. 
 
 #### Determine Vehicle Position: 
 
-To calculate the vehicle's position to the center of the lane the following assumptions were made:
+To calculate the vehicle's position to the center of the lane, the following assumptions were made:
 
-1. The camera is mounted at the vehicles center position with no offset. Therefore, the vehicle's current position is the midpoint of the image.
+1. The camera is mounted at the vehicle's center position with no offset. Therefore, the vehicle's current position is the midpoint of the image.
 2. The lane center is the average point between the first indicies of the left and right lane. 
 
 To find the distance to lane center the follow calculation was used:
@@ -233,22 +268,27 @@ To find the distance to lane center the follow calculation was used:
 
 ## Step 8. Warp Detected Line Back to Orginal 
 
-To warp the bird's eye view image back to the orginal perspective image. The following steps were used:
+`Code found in Cell 25 of AdvancedLaneFinding.ipynb`
 
-1. Determine all the points and their indicies used for both the right and left lines.
+To warp the perspecitve transform image back to the orginal perspective image. The following steps were used:
+
+1. Determine every point's indicides used for the left and right lines.
 2. Create a green polygon to show the detected lane area in the bird's eye image:
-        `cv2.fillPoly(color_overlay, np.int_([all_pts]), (0,255,0))`
+- `cv2.fillPoly(color_overlay, np.int_([all_pts]), (0,255,0))`
 3. Create red lines to show the left and right lanes in the bird's eye image:
-        `cv2.polylines(color_overlay, left_pts, isClosed=False, color=(255,0,0), thickness=30)`
-        `cv2.polylines(color_overlay, right_pts, isClosed=False, color=(255,0,0), thickness=30)`    
+- `cv2.polylines(color_overlay, left_pts, isClosed=False, color=(255,0,0), thickness=30)`
+- `cv2.polylines(color_overlay, right_pts, isClosed=False, color=(255,0,0), thickness=30)`    
 
 4. Warp the bird's eye image back to the original perspecitve using the bird_eye_transfrom explained above. For this transform, the inverse perspective matrix is used. 
+- `unwarped_overlay = bird_eye_transform(color_overlay, orient='M_inv')`
 
-5. The add weighted function `cv2.addWeighted` is used to add the colored polygon/lines to the original image. 
+5. Use the add weighted function `cv2.addWeighted` to add the colored polygon/lines to the original image. 
 
 ![alt text][image17]
 
 ## Step 9. Output Visual Display and Lane/Vehicle Information
+
+`Code found in Cell 26 of AdvancedLaneFinding.ipynb`
 
 The final step is to add the text information about the lane and vehicle position to the final output image. 
 
@@ -273,5 +313,7 @@ My pipeline for image processing certainly has areas from improvement.
 
 First, is the smoothing of the line calculation. The line detection can jump around slightly, causing an incorrect curvature measurement to be output. Implemented a curvature smoothing function, such as a moving average or lowpass filter, would significantly help the output of the lanes and curvature measurement. 
 
-Second, further optimizing my binary threshold used to find accurate lane markers. Since this was already a fairly time consuming task, further improvement of this step in the image processing pipeline would improve the accuracy of lane detection. 
+Second, further optimizing my binary threshold used to find accurate lane markers. Since this was already a fairly time consuming task, further improvement of this step in the image processing pipeline would improve the accuracy of lane detection.
+
+Lastly, I think storing the information of the previous line history would be helpful in more challengine situations. If a line is lost or cannot be detected by any of the functions I defined, the previous line information could be used to continue the display of the previously detected line until the actual line becomes detectable again. I would like to revist this step in the future and make a more robust image processing pipeline. 
 
