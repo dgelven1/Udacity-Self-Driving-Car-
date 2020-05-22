@@ -1,17 +1,15 @@
-# **Traffic Sign Recognition** 
+# **Traffic Sign Classifier Project** 
 
 ---
 
-**Build a Traffic Sign Classifier Project**
+For this project within the Udacity Self Driving Car course, I was tasked with creating a convolutional neural network to correctly predict the sign type of 5 randomly selected German traffic signs. I was provided three sets of data for creating the classifier. A training data set, a validation data set, and a test data set. Below you will find the steps I followed to create my classifier and how my classifier performed on when classifiying the random German traffic signs.
 
 The goals / steps of this project are the following:
-* Load the data set (see below for links to the project data set)
-* Explore, summarize and visualize the data set
+* Load the data set, explore, summarize and visualize the data set (see below for links to the project data set)
+* Augment and preprocess the data
 * Design, train and test a convolutional neural network architecture
 * Use the model to make predictions on new images
 * Analyze the softmax probabilities of the new images
-* Summarize the results with a written report
-
 
 [//]: # (Image References)
 
@@ -25,11 +23,11 @@ The goals / steps of this project are the following:
 [image8]: ./Writeup_images/Top_SoftMax_Prob.png
 
 
-Link to my traffic sign classifier [project code](https://github.com/udacity/CarND-Traffic-Sign-Classifier-Project/blob/master/Traffic_Sign_Classifier.ipynb)
+Link to my traffic sign classifier [project code](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb)
 
-### Data Set Summary & Exploration
+### Step 1: Data Set Summary & Exploration
 
-#### 1. Overall summary of data provided for the classifier. 
+#### Overall summary of data provided for the classifier. 
 
 I used the numpy library to calculate summary statistics of the traffic
 signs data set:
@@ -40,7 +38,7 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-#### 2. Visualize the distibution of the data set. 
+#### Visualize the distibution of the data set. 
 
 Here is an histogram of the distribution of the training, validation, and test data set. 
 
@@ -50,7 +48,7 @@ Here is an example of some of the images the data sets contain.
 
 ![alt text][image2]
 
-#### 3. Increase the training set to even the sample distribution
+#### Increase the training set to even the sample distribution
 Observing a large difference in the number of samples for a given sign, I wanted to give my training set a more even distribution. 
 
 First, I chose a minimum number of images that each sign label could have. If the sign label had less than this minimum threshold, I would copy the image of the sign and add it to the distribution. If the sign label was already greater than this threshold, I would do nothing. 
@@ -59,11 +57,7 @@ Here is an example of the distibution of training data after increasing the size
 
 ![alt text][image3]
 
-### Design and Test a Model Architecture
-
-#### 1. Describe how you preprocessed the image data. What techniques were chosen and why did you choose these techniques? Consider including images showing the output of each preprocessing technique. Pre-processing refers to techniques such as converting to grayscale, normalization, etc. (OPTIONAL: As described in the "Stand Out Suggestions" part of the rubric, if you generated additional data for training, describe why you decided to generate additional data, how you generated the data, and provide example images of the additional data. Then describe the characteristics of the augmented training set like number of images in the set, number of images for each class, etc.)
-
-#### 1. Data Augmentation
+### Step 2: Data Augmentation and Preprocessing 
 
 As a first step, I wanted to augment the images in the training set to give the model a wide varitey of images to train with. The first two steps I used the data augmentation was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. 
 
@@ -82,10 +76,10 @@ Here is an example of the different possible data augmentation techniques applie
 
 ![alt text][image4]
 
-#### 2. Grayscaling
+#### Grayscaling
 After data augmentation, the next step was to convert every image to grayscale.
 
-#### 3. Standardizing the data set
+#### Standardizing 
 
 Next, I standardized the data by using the subtracting each pixel value in every image by 128, then dividing by 128. This gives every pixel value a number between -1 and 1. 
 
@@ -95,10 +89,9 @@ You can see the results of applying this standardization by observing the mean a
 | Mean = 74.26       		| Mean =  -0.41  							| 
 | Standard Deviation =  82.53 	| Standard Deviation =  0.62     	|
 
+### Step 3: Design a Model Architecture
 
-#### 4. Model architecture 
-Describe what your final model architecture looks like including model type, layers, layer sizes, connectivity, etc.) Consider including a diagram and/or table describing the final model.
-
+#### Model architecture 
 After completing the LeNet lab exercise in the course, I decided to use a similar model architecture for my traffic sign model. 
 
 My final model consisted of the following layers:
@@ -125,12 +118,16 @@ My final model consisted of the following layers:
 
 ![alt text][image8]
 
+### Step 4: Train and Test Convolutional Neural Network Model
 
+#### Model Training
 #### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
 To train the model, I used an ....
 
 #### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+
+#### Testing Model Accuracy
 
 My final model results were:
 * training set accuracy of ?
@@ -150,11 +147,11 @@ If a well known architecture was chosen:
 * How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
  
 
-### Test a Model on New Images
+### Step 5: Test a Model on New German Traffic Sign Images
 
-#### 1. Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+#### Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
 
-Here are five German traffic signs that I found on the web:
+I used google maps street view to find traffic signs around the German city of Munich. I chose this approach to simulate how an actual vehicle would view a traffic sign in a normal driving siutation. Since the images from google street view are captured using a vehicle with a camera attached to the roof of the vehicle, I thought this would be very representative of a real driving scenario. The following 5 images were used:
 
 ![alt text][image7]
 
