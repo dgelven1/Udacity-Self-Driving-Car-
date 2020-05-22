@@ -21,7 +21,7 @@ The goals / steps of this project are the following:
 [image6]: ./Writeup_images/Image_Pipeline.png
 [image7]: ./Writeup_images/My_German_Images.png
 [image8]: ./Writeup_images/Top_SoftMax_Prob.png
-
+[image9]: ./Writeup_images/Bright_Sharp_Img.png
 
 Link to my traffic sign classifier [project code](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb)
 
@@ -59,7 +59,10 @@ Here is an example of the distibution of training data after increasing the size
 
 ### Step 2: Data Augmentation and Preprocessing 
 
-As a first step, I wanted to augment the images in the training set to give the model a wide varitey of images to train with. The first two steps I used the data augmentation was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. 
+As a first step, I wanted to augment the images in the training set to give the model a wide varitey of images to train with. The first two steps I used the data augmentation was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. See below for an example of how increasing the sharpness and brightness of an image can improve the clarity and quality of the image:
+
+![alt text][image9]
+
 
 To have a robust traffic sign classifier that would be effective in real world situations, the model needs training images that resemble how traffic signs might be viewed from a vehilce. For this I implemented random data augmentation to the entire training data set. 
 
@@ -88,6 +91,11 @@ You can see the results of applying this standardization by observing the mean a
 |:---------------------:|:---------------------------------------------:| 
 | Mean = 74.26       		| Mean =  -0.41  							| 
 | Standard Deviation =  82.53 	| Standard Deviation =  0.62     	|
+
+#### Image Preprocessing Pipeline
+Below is an example of how every image within the training data set is preprocessed before the entire set is used to train the model:
+
+![alt text][image6]
 
 ### Step 3: Design a Model Architecture
 
