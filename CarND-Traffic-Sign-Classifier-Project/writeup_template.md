@@ -2,10 +2,10 @@
 
 ---
 
-For this project within the Udacity Self Driving Car course, I was tasked with creating a convolutional neural network to correctly predict the sign type of 5 randomly selected German traffic signs. I was provided three sets of data for creating the classifier. A training data set, a validation data set, and a test data set. Below you will find the steps I followed to create my classifier and how my classifier performed on when classifiying the random German traffic signs.
+For this project within the Udacity Self Driving Car course, I was tasked with creating a convolutional neural network to correctly predict the sign type of 5 randomly selected German traffic signs. I was provided three sets of data for creating the classifier. A training, validation, and a test data set. Below you will find the steps I followed to create my classifier and how my classifier performed when classifiying the random German traffic signs.
 
 The goals / steps of this project are the following:
-* Load the data set, explore, summarize and visualize the data set (see below for links to the project data set)
+* Load the data set, explore, summarize, and visualize the data set (see below for links to the project data set)
 * Augment and preprocess the data
 * Design, train and test a convolutional neural network architecture
 * Use the model to make predictions on new images
@@ -25,9 +25,9 @@ The goals / steps of this project are the following:
 
 Link to my traffic sign classifier [project code](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb)
 
-### Step 1: Data Set Summary & Exploration
+## Step 1: Data Set Summary & Exploration
 
-#### Overall summary of data provided for the classifier. 
+### Overall summary of data provided for the classifier. 
 
 I used the numpy library to calculate summary statistics of the traffic
 signs data set:
@@ -38,28 +38,29 @@ signs data set:
 * The shape of a traffic sign image is (32, 32, 3)
 * The number of unique classes/labels in the data set is 43
 
-#### Visualize the distibution of the data set. 
+### Visualize the distibution of the data set. 
 
-Here is an histogram of the distribution of the training, validation, and test data set. 
+Below is the distribution of the traffic sign images for the training, validation, and test data set. 
 
 ![alt text][image1]
 
-Here is an example of some of the images the data sets contain.
+Below is an example of some of the images the data sets contain.
 
 ![alt text][image2]
 
-#### Increase the training set to even the sample distribution
-Observing a large difference in the number of samples for a given sign, I wanted to give my training set a more even distribution. 
+### Increase the size of training data set
 
-First, I chose a minimum number of images that each sign label could have. If the sign label had less than this minimum threshold, I would copy the image of the sign and add it to the distribution. If the sign label was already greater than this threshold, I would do nothing. 
+After observing a large difference in the number of samples for a given sign in the distribution graph above, I wanted to give my training set a more even distribution. 
 
-Here is an example of the distibution of training data after increasing the size of the data set:
+First, I chose a minimum number of images that I wanted each sign type to have. If the sign type had less than this minimum threshold, I would copy a image of the sign and add it to the distribution. I iterated through the existing number of images and made copies of each image until I reached the minimum threshold. Using this approach, I ensured that I did not make multiple copies of the same image to reach the minimum threshold, allowing the training data set to have a variety of different images for the same traffic sign type.  
+
+Below is the distibution of training data after increasing the size of the data set:
 
 ![alt text][image3]
 
 ### Step 2: Data Augmentation and Preprocessing 
 
-As a first step, I wanted to augment the images in the training set to give the model a wide varitey of images to train with. The first two steps I used the data augmentation was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. See below for an example of how increasing the sharpness and brightness of an image can improve the clarity and quality of the image:
+As a first step, I wanted to augment the images in the training set to give the model multiple different views of an image. The first two steps I used in the data augmentation process was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. See below for an example of how increasing the sharpness and brightness of an image can improve the clarity and quality of the image:
 
 ![alt text][image9]
 
@@ -75,16 +76,17 @@ I decided to use five different data augmentation techniques:
 | Left Warp         	| Warps the image to left to simulate viewing sign from a left angle	|
 | Right Warp	    | Warps the image to the right to simulate viewing sign from a right angle	|
 
-Here is an example of the different possible data augmentation techniques applied to the same image:
+Below is an example of the different possible data augmentation techniques applied to the same image:
 
 ![alt text][image4]
 
-#### Grayscaling
-After data augmentation, the next step was to convert every image to grayscale.
+### Grayscaling
+After data augmentation, the next step was to convert every image to grayscale. I chose to use grayscale as a preprocessing techinque because so many of the German traffic signs have similar color patterns, which would not be benificial to use when training my model.
+Furthermore, the results from multiple experiments involving traffic sign classifiers [1] have noted that using grayscale images produces a higher accuracy of classification. 
 
-#### Standardizing 
+### Standardizing the Data Set
 
-Next, I standardized the data by using the subtracting each pixel value in every image by 128, then dividing by 128. This gives every pixel value a number between -1 and 1. 
+Next, I standardized the data by using the subtracting each pixel value in every image by 128, then dividing by 128. This will give the entire data set a minimum value of -1 and maximum value of 1. The goal of this standardization was for the mean and stardard deviation of data sets to be 0 and 1 respectively. 
 
 You can see the results of applying this standardization by observing the mean and standard deviation from before and after. 
 | Before         		|     After	        					| 
@@ -92,15 +94,19 @@ You can see the results of applying this standardization by observing the mean a
 | Mean = 74.26       		| Mean =  -0.41  							| 
 | Standard Deviation =  82.53 	| Standard Deviation =  0.62     	|
 
-#### Image Preprocessing Pipeline
-Below is an example of how every image within the training data set is preprocessed before the entire set is used to train the model:
+Normal color image data has pixel values ranging from 0 to 255. So, different features in an image could potentially have a wide range of potential pixel values and could cause some difficulties while the model is learning. By standardizing the data and modifying the pixel values to be on a much small scale, this allows the model to learn more efficiently. This is seen during the trail and error of training my model. Training the model withouth standardizing the data set, the model achieved 94.9% accuracy. Using the same hyperparameters, but with a standardized data set, the model was able to achieve 96.5% accuracy. 
+
+
+
+### Image Preprocessing Pipeline
+Below is an example of how every image within the training data set is preprocessed:
 
 ![alt text][image6]
 
-### Step 3: Design a Model Architecture
+## Step 3: Design a Model Architecture
 
-#### Model architecture 
-After completing the LeNet lab exercise in the course, I decided to use a similar model architecture for my traffic sign model. 
+### Model architecture 
+After completing the LeNet lab exercise in the course, I decided to use a similar model architecture for my traffic sign model. I began the project by running the LeNet with no data preprocessing and now changes to the arcitecture. This gave me a model accurcay of approximately 87.2%. This was a good start given no alteration to the data sets and architeture. One modification I chose to make was to add a dropout layer before each of the fully connected layers to help prevent overfitting. 
 
 My final model consisted of the following layers:
 
@@ -126,44 +132,60 @@ My final model consisted of the following layers:
 
 ![alt text][image8]
 
-### Step 4: Train and Test Convolutional Neural Network Model
+## Step 4: Train and Test Convolutional Neural Network Model
 
-#### Model Training
-#### 3. Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
+### Model Training
+### Describe how you trained your model. The discussion can include the type of optimizer, the batch size, number of epochs and any hyperparameters such as learning rate.
 
-To train the model, I used an ....
+To train the model, at first I used the same hyperparameters as the LeNet model given in the lab exercise. Using a dropout rate of 85% validation accuracy was pretty good at approximately 94.5%. I decided to tune the hyperparameters slightly to achieve a better validation accuracy. Below are final set of hyper parameters I used to achieve a validation accuracy above 96%. 
 
-#### 4. Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
+* Learning Rate = 0.00095
+* Batch Size = 64
+* Epochs = 30
+* Dropout Rate = 0.75
 
-#### Testing Model Accuracy
+Using a smaller batch size caused the model to train much slower, but produced better validation results. Changing the learning rate did not have a big affect of the accuracy unless it was also changed along with the number of epochs. To keep the traing time to a minimum, I chose to leave the learning rate at 0.001 and increase the epochs to account for the newly introduced dropouts at each fully connected layer.  
 
-My final model results were:
-* training set accuracy of ?
-* validation set accuracy of ? 
-* test set accuracy of ?
+### Describe the approach taken for finding a solution and getting the validation set accuracy to be at least 0.93. Include in the discussion the results on the training, validation and test sets and where in the code these were calculated. Your approach may have been an iterative process, in which case, outline the steps you took to get to the final solution and why you chose those steps. Perhaps your solution involved an already well known implementation or architecture. In this case, discuss why you think the architecture is suitable for the current problem.
 
-If an iterative approach was chosen:
-* What was the first architecture that was tried and why was it chosen?
-* What were some problems with the initial architecture?
-* How was the architecture adjusted and why was it adjusted? Typical adjustments could include choosing a different model architecture, adding or taking away layers (pooling, dropout, convolution, etc), using an activation function or changing the activation function. One common justification for adjusting an architecture would be due to overfitting or underfitting. A high accuracy on the training set but low accuracy on the validation set indicates over fitting; a low accuracy on both sets indicates under fitting.
-* Which parameters were tuned? How were they adjusted and why?
-* What are some of the important design choices and why were they chosen? For example, why might a convolution layer work well with this problem? How might a dropout layer help with creating a successful model?
+As described above, I used an interative approach to finding a solution to achieve a validation accuracy above 93%. Below you will find a summary of the iterative steps I used to find my final solution for training my classifer:
 
-If a well known architecture was chosen:
-* What architecture was chosen?
-* Why did you believe it would be relevant to the traffic sign application?
-* How does the final model's accuracy on the training, validation and test set provide evidence that the model is working well?
+    1. Using the LeNet Architecture and hyperparameters. Validation accuracy = 87.2%
+    2. Using grayscale images instead of color images for training and validation. Validation accuracy = 91.5%
+    3. Implementing standardization. Validation accuracy = 91.7% (Not a huge change, but slightly helps the accuracy)
+    4. Increase the training data set size. Validation accuracy = 92.5%
+    5. Implementing data augmentation to entire training data set. Validation Accuracy = 94.2%
+    6. Implementing sharpening and increasing brightness of training, validation, and test datset. Validation accuracy = 95.3%
+    7. Adding droput layer with a keep probability of 50%. Validation accuracy = 88%
+    8. Decreasing batch size to 64 and increasing keep probability to 75%. Validation accuracy = 95.8%
+    9. Increasing epochs from 10 to 30. Validation accuracy = 96.5%
+    10. Changing learning rate from 0.001 to 0.00095. Validation accuracy 97.1%
+
+### Final Model Accuracy Results
+* Validation set accuracy of 96.5%
+* Test set accuracy of 94.1%
+
+### Solution Discussion
+
+As you can see by the results above the model performs well on both the validation and test data sets. Through my iterative process I did implement a new arciteture to view the difference in accuracy results. I implemented the ConvNet arcitecture used in Sermanet and LeCun's experiment for a traffic sign classifier[1]. The architecture is similar to the LeNet but splits the output from the first convolutional layer and adds this output with the second convolutional layers output before the final full connection layer. This architecture produced better accuracy results in Sermanet and LeCun's classifer. For me this architecture produced slightly worse accuracy performance, so I decided to stick with the LeNet architeture. Below you can find an image comparing the two architectures:
+
+![alt text][image8]
+
+Some issues with the original LeNet architecture was overfitting. I would achieve a high accuracy on the validation data set, but the accuracy on the test set would be much lower. To solve this issue, I introduce the dropouts in between the fully connected layers. This helped the model in preventing overfitting by only keeping a certain percentage of outputs from these layers and passing them as inputs into the next layer. 
+
+![alt text][image8]
+
+
  
+## Step 5: Test a Model on New German Traffic Sign Images
 
-### Step 5: Test a Model on New German Traffic Sign Images
-
-#### Choose five German traffic signs found on the web and provide them in the report. For each image, discuss what quality or qualities might be difficult to classify.
+### Find 5 German Traffic Signs
 
 I used google maps street view to find traffic signs around the German city of Munich. I chose this approach to simulate how an actual vehicle would view a traffic sign in a normal driving siutation. Since the images from google street view are captured using a vehicle with a camera attached to the roof of the vehicle, I thought this would be very representative of a real driving scenario. The following 5 images were used:
 
 ![alt text][image7]
 
-The first image might be difficult to classify because ...
+Some of these images may be difficult for the model to classify because of the similar features between multiple signs in the data set. For example the 60 kph speed limit sign could easily be misclassified as a 80 kph sign. The features of the sign are extremely similar and differentiating between a 6 and 8 might be challenging for the classifer. Also there are multiple signs that include arrows and identifying the difference between all of those signs could be difficult for my classifier. 
 
 #### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
 
@@ -200,3 +222,7 @@ For the first image, the model is relatively sure that this is a stop sign (prob
 #### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
 
 
+# References
+[1] P. Semanet, Y. LeCun, “Traffic Sign Recognition with Multi-Scale Convolutional Networks”
+
+[2] [Stanford CS231n](https://cs231n.github.io/neural-networks-2/)
