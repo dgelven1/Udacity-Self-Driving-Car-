@@ -223,10 +223,11 @@ The image below shows the original sign along with the top 4 possible sign predi
 
 ## Discussion
 
-Overall my convolution neural network traffic sign classifer has performed very well. With 100% prediction on images taken from google maps and real world scenario's, I am confident in my model's ability to classify signs correctly. With that said, I still think they is some room for improvement. First, different data augmentation techniques could be used to manipulate the images to train the model. Second, I could explore different network architectures with deeper models and smoother reduction of image size. 
+Overall my convolution neural network traffic sign classifer has performed very well. With 100% prediction on images taken from google maps and real world scenario's, I am confident in my model's ability to classify signs correctly. With that said, I still think they is some room for improvement. First, different data augmentation techniques could be used to manipulate the images to train the model. Second, I could explore different network architectures with deeper models and smoother reduction of image size.
 
 
 # References
+
 [1] P. Semanet, Y. LeCun, “Traffic Sign Recognition with Multi-Scale Convolutional Networks”
 
 [2] [Stanford CS231n](https://cs231n.github.io/neural-networks-2/)
