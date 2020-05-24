@@ -150,20 +150,20 @@ Using a smaller batch size caused the model to train much slower, but produced b
 
 As described above, I used an interative approach to finding a solution to achieve a validation accuracy above 93%. Below you will find a summary of the iterative steps I used to find my final solution for training my classifer:
 
-    1. Using the LeNet Architecture and hyperparameters. Validation accuracy = 87.2%
-    2. Using grayscale images instead of color images for training and validation. Validation accuracy = 91.5%
-    3. Implementing standardization. Validation accuracy = 91.7% (Not a huge change, but slightly helps the accuracy)
-    4. Increase the training data set size. Validation accuracy = 92.5%
-    5. Implementing data augmentation to entire training data set. Validation Accuracy = 94.2%
-    6. Implementing sharpening and increasing brightness of training, validation, and test datset. Validation accuracy = 95.3%
-    7. Adding droput layer with a keep probability of 50%. Validation accuracy = 88%
-    8. Decreasing batch size to 64 and increasing keep probability to 75%. Validation accuracy = 95.8%
-    9. Increasing epochs from 10 to 30. Validation accuracy = 96.5%
-    10. Changing learning rate from 0.001 to 0.00095. Validation accuracy 97.1%
+   1. Using the LeNet Architecture and hyperparameters. Validation accuracy = 87.2%
+   2. Using grayscale images instead of color images for training and validation. Validation accuracy = 91.5%
+   3. Implementing standardization. Validation accuracy = 91.7% (Not a huge change, but slightly helps the accuracy)
+   4. Increase the training data set size. Validation accuracy = 92.5%
+   5. Implementing data augmentation to entire training data set. Validation Accuracy = 94.2%
+   6. Implementing sharpening and increasing brightness of training, validation, and test datset. Validation accuracy = 95.3%
+   7. Adding droput layer with a keep probability of 50%. Validation accuracy = 88%
+   8. Decreasing batch size to 64 and increasing keep probability to 75%. Validation accuracy = 95.8%
+   9. Increasing epochs from 10 to 30. Validation accuracy = 96.5%
+   10. Changing learning rate from 0.001 to 0.00095. Validation accuracy 97.1%
 
 ### Final Model Accuracy Results
-* Validation set accuracy of 96.5%
-* Test set accuracy of 94.1%
+* Validation set accuracy of 96.7%
+* Test set accuracy of 94.0%
 
 ### Solution Discussion
 
@@ -179,7 +179,7 @@ Some issues with the original LeNet architecture was overfitting. I would achiev
  
 ## Step 5: Test a Model on New German Traffic Sign Images
 
-### Find 5 German Traffic Signs
+### Find 6 German Traffic Signs
 
 I used google maps street view to find traffic signs around the German city of Munich. I chose this approach to simulate how an actual vehicle would view a traffic sign in a normal driving siutation. Since the images from google street view are captured using a vehicle with a camera attached to the roof of the vehicle, I thought this would be very representative of a real driving scenario. The following 5 images were used:
 
@@ -187,39 +187,45 @@ I used google maps street view to find traffic signs around the German city of M
 
 Some of these images may be difficult for the model to classify because of the similar features between multiple signs in the data set. For example the 60 kph speed limit sign could easily be misclassified as a 80 kph sign. The features of the sign are extremely similar and differentiating between a 6 and 8 might be challenging for the classifer. Also there are multiple signs that include arrows and identifying the difference between all of those signs could be difficult for my classifier. 
 
-#### 2. Discuss the model's predictions on these new traffic signs and compare the results to predicting on the test set. At a minimum, discuss what the predictions were, the accuracy on these new predictions, and compare the accuracy to the accuracy on the test set (OPTIONAL: Discuss the results in more detail as described in the "Stand Out Suggestions" part of the rubric).
+### Prediction Results
 
-Here are the results of the prediction:
+Below are the results of my model's prediction:
 
 | Image			        |     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| Stop Sign      		| Stop sign   									| 
-| U-turn     			| U-turn 										|
-| Yield					| Yield											|
-| 100 km/h	      		| Bumpy Road					 				|
-| Slippery Road			| Slippery Road      							|
+| 60 Kph Sign      		| 60 Kph sign   									| 
+| No Entry     			|  No Entry 										|
+| Stop Sign					| Stop Sign											|
+| Go Straight or Left	      		| Go Straight or Left					 				|
+| Yield			| Yield      							|
+| Turn Left Ahead			| Turn Left Ahead      							|
 
-The model was able to correctly guess 5 of the 5 traffic signs, which gives an accuracy of 100%. 
+The model was able to correctly guess 6 of the 6 traffic signs, which gives an accuracy of 100%. 
 
 
-#### 3. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
+### Model Prediction Probability. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
 
 The code for making predictions on my final model is located in the 11th cell of the Ipython notebook.
 
-For the first image, the model is relatively sure that this is a stop sign (probability of 0.6), and the image does contain a stop sign. The top five soft max probabilities were
+Below were the probabilites of each sign prediction. This probability shows the certainty of the model's predictions. As you can see below the model was 100% certain on 5 out of the 6 signs. The only sign that had less than 100% probability was the go ahead and turn left sign.
 
 | Probability         	|     Prediction	        					| 
 |:---------------------:|:---------------------------------------------:| 
-| .60         			| Stop sign   									| 
-| .20     				| U-turn 										|
-| .05					| Yield											|
-| .04	      			| Bumpy Road					 				|
-| .01				    | Slippery Road      							|
+| 1.00         			| 60 Kph Sign   									| 
+| 1.00     				| No Entry 										|
+| 1.00					| Stop Sign											|
+| 0.95	      			| Go Straight or Left					 				|
+| 1.00				    | Yield      							|
+| 1.00				    | Turn Left Ahead      							|
+
+The image below shows the original sign along with the top 4 possible sign predictions by the model. The sign that gave the model a challenge was the go ahead a turn left sign. This sign has similar features as many other signs, such as the go straight and turn right, ahead only or the turn left ahead sign. Even with the similarities between the features in these signs, the model correctly classified this sign and with a high probability of 95%. 
 
 ![alt text][image8]
 
-### (Optional) Visualizing the Neural Network (See Step 4 of the Ipython notebook for more details)
-#### 1. Discuss the visual output of your trained network's feature maps. What characteristics did the neural network use to make classifications?
+
+## Discussion
+
+Overall my convolution neural network traffic sign classifer has performed very well. With 100% prediction on images taken from google maps and real world scenario's, I am confident in my model's ability to classify signs correctly. With that said, I still think they is some room for improvement. First, different data augmentation techniques could be used to manipulate the images to train the model. Second, I could explore different network architectures with deeper models and smoother reduction of image size. 
 
 
 # References
