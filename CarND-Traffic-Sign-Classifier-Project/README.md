@@ -22,6 +22,8 @@ The goals / steps of this project are the following:
 [image7]: ./Writeup_images/My_German_Images.png
 [image8]: ./Writeup_images/Top_SoftMax_Prob.png
 [image9]: ./Writeup_images/Bright_Sharp_Img.png
+[image10]: ./Writeup_images/CNN_Architecture.JPG
+[image11]: ./Writeup_images/Dropout.JPG
 
 Link to my traffic sign classifier [project code](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb)
 
@@ -49,7 +51,6 @@ Below is an example of some of the images the data sets contain.
 ![alt text][image2]
 
 ### Increase the size of training data set
-The code for incresing the data set size is located [here](https://github.com/dgelven1/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell4)
 
 After observing a large difference in the number of samples for a given sign in the distribution graph above, I wanted to give my training set a more even distribution. 
 
@@ -60,16 +61,11 @@ Below is the distibution of training data after increasing the size of the data 
 ![alt text][image3]
 
 ### Step 2: Data Augmentation and Preprocessing 
-Code for data augmentation techniques located [here](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell5)
-
 As a first step, I wanted to augment the images in the training set to give the model multiple different views of an image. The first two steps I used in the data augmentation process was to increase the sharpness and brightness of each image. After viewing a sample of the test set, I noticed the images were blurry and sometimes very dark. I decided it would be best to sharpen and brighten each image to improve the quality of the image being trained by the classifier. This step was also done to the validation and test data sets. See below for an example of how increasing the sharpness and brightness of an image can improve the clarity and quality of the image:
 
 ![alt text][image9]
 
-
 To have a robust traffic sign classifier that would be effective in real world situations, the model needs training images that resemble how traffic signs might be viewed from a vehilce. For this I implemented random data augmentation to the entire training data set.
-
-Code for interating through entire train data set and augmented images located [here](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell6)
 
 I decided to use five different data augmentation techniques:
 | Augmentation Type    		|     Description	        					| 
@@ -109,8 +105,6 @@ Below is an example of how every image within the training data set is preproces
 ![alt text][image6]
 
 ## Step 3: Design a Model Architecture
-
-Model code located [here]Code for data augmentation techniques located [here](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell7)
 
 ### Model architecture 
 After completing the LeNet lab exercise in the course, I decided to use a similar model architecture for my traffic sign model. I began the project by running the LeNet with no data preprocessing and now changes to the arcitecture. This gave me a model accurcay of approximately 87.2%. This was a good start given no alteration to the data sets and architeture. One modification I chose to make was to add a dropout layer before each of the fully connected layers to help prevent overfitting. 
@@ -175,11 +169,11 @@ As described above, I used an interative approach to finding a solution to achie
 
 As you can see by the results above the model performs well on both the validation and test data sets. Through my iterative process I did implement a new arciteture to view the difference in accuracy results. I implemented the ConvNet arcitecture used in Sermanet and LeCun's experiment for a traffic sign classifier[1]. The architecture is similar to the LeNet but splits the output from the first convolutional layer and adds this output with the second convolutional layers output before the final full connection layer. This architecture produced better accuracy results in Sermanet and LeCun's classifer. For me this architecture produced slightly worse accuracy performance, so I decided to stick with the LeNet architeture. Below you can find an image comparing the two architectures:
 
-![alt text][image8]
+![alt text][image10]
 
 Some issues with the original LeNet architecture was overfitting. I would achieve a high accuracy on the validation data set, but the accuracy on the test set would be much lower. To solve this issue, I introduce the dropouts in between the fully connected layers. This helped the model in preventing overfitting by only keeping a certain percentage of outputs from these layers and passing them as inputs into the next layer. 
 
-![alt text][image8]
+![alt text][image11]
 
 
  
@@ -210,8 +204,6 @@ The model was able to correctly guess 6 of the 6 traffic signs, which gives an a
 
 
 ### Model Prediction Probability. Describe how certain the model is when predicting on each of the five new images by looking at the softmax probabilities for each prediction. Provide the top 5 softmax probabilities for each image along with the sign type of each probability. (OPTIONAL: as described in the "Stand Out Suggestions" part of the rubric, visualizations can also be provided such as bar charts)
-
-The code for making predictions is located [here](Code for data augmentation techniques located [here](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell8))
 
 Below were the probabilites of each sign prediction. This probability shows the certainty of the model's predictions. As you can see below the model was 100% certain on 5 out of the 6 signs. The only sign that had less than 100% probability was the go ahead and turn left sign.
 
