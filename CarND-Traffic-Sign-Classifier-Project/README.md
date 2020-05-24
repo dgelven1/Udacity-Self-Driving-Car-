@@ -49,7 +49,7 @@ Below is an example of some of the images the data sets contain.
 ![alt text][image2]
 
 ### Increase the size of training data set
-The code for incresing the data set size is located [here](CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell4)
+The code for incresing the data set size is located [here](https://github.com/dgelven1/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell4)
 
 After observing a large difference in the number of samples for a given sign in the distribution graph above, I wanted to give my training set a more even distribution. 
 
