@@ -146,10 +146,10 @@ My final model consisted of the following layers:
 
 To train the model, at first I used the same hyperparameters as the LeNet model given in the lab exercise. Using a dropout rate of 85% validation accuracy was pretty good at approximately 94.5%. I decided to tune the hyperparameters slightly to achieve a better validation accuracy. Below are final set of hyper parameters I used to achieve a validation accuracy above 96%. 
 
-* Learning Rate = 0.00095
+* Learning Rate = 0.001
 * Batch Size = 64
 * Epochs = 30
-* Dropout Rate = 0.75
+* Dropout Rate = 0.70
 
 Using a smaller batch size caused the model to train much slower, but produced better validation results. Changing the learning rate did not have a big affect of the accuracy unless it was also changed along with the number of epochs. To keep the traing time to a minimum, I chose to leave the learning rate at 0.001 and increase the epochs to account for the newly introduced dropouts at each fully connected layer.  
 
@@ -164,9 +164,8 @@ As described above, I used an interative approach to finding a solution to achie
    5. Implementing data augmentation to entire training data set. Validation Accuracy = 94.2%
    6. Implementing sharpening and increasing brightness of training, validation, and test datset. Validation accuracy = 95.3%
    7. Adding droput layer with a keep probability of 50%. Validation accuracy = 88%
-   8. Decreasing batch size to 64 and increasing keep probability to 75%. Validation accuracy = 95.8%
-   9. Increasing epochs from 10 to 30. Validation accuracy = 96.5%
-   10. Changing learning rate from 0.001 to 0.00095. Validation accuracy 97.1%
+   8. Decreasing batch size to 64 and increasing keep probability to 7%. Validation accuracy = 95.8%
+   9. Increasing epochs from 10 to 30. Validation accuracy = 96.7%
 
 ### Final Model Accuracy Results
 * Validation set accuracy of 96.7%
