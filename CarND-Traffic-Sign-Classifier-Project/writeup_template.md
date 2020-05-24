@@ -29,7 +29,7 @@ Link to my traffic sign classifier [project code](https://github.com/dgelven1/Ud
 
 ### Overall summary of data provided for the classifier. 
 
-[cell 1](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#first_cell)
+[cell 1](https://github.com/dgelven1/Udacity-Self-Driving-Car-/blob/master/CarND-Traffic-Sign-Classifier-Project/Traffic_Sign_Classifier_V4.ipynb#cell1)
 
 I used the numpy library to calculate summary statistics of the traffic
 signs data set:
