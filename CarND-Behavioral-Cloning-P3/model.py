@@ -312,7 +312,7 @@ def main():
     if model:
         model.fit_generator(train_data_gen, steps_per_epoch=15000//batch_size, validation_data=validation_data_gen, validation_steps=3000//batch_size, epochs=7  ,verbose=1)
 
-        model.save('new_model.h5')
+        model.save('Test.h5')
     
     print('testing main')
     
