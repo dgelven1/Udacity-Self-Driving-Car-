@@ -43,10 +43,8 @@ def even_dist(data, angles):
     bin_count = 1
     for j in range(1, len(bin_val)):
         if abs(bin_val[j]) > 0.45:
-            print('abs value = ', abs(bin_val[j]))
             dist_factor = 10
         elif abs(bin_val[j]) > 0.3:
-            print('abs value = ', abs(bin_val[j]))
             dist_factor = 4
         else: 
             dist_factor = 1.5
@@ -225,47 +223,6 @@ def train_data_generator(dir_name, data, batch_size, val_data=False):
             
         yield(np.array(x_train), np.array(y_train))
 
-#gen = train_data_generator('My_data', data, batch_size=32)
-
-#train_data = next(gen)
-#print('train data')
-#print(train_data[1])
-
-
-def validation_data_generator(dir_name, data, batch_size):
-
-    while 1:
-        data_size = len(data)
-        x_valid = []
-        y_valid = []
-        while len(x_valid) <= batch_size-1:
-            row_num = np.random.randint(data_size-1)
-            row = data[row_num]
-            #randomly use camera images
-            #rand_camera = np.random.randint(0,2)
-            rand_camera = 0
-            #load the image from directory using the random row and camera
-            source_path = row[rand_camera]
-            filename = source_path.split('/')[-1]
-            image_path = dir_name + '/IMG/' + filename
-            image = cv2.imread(image_path)
-            measurement = row[3]
-            
-            x_valid.append(image)
-            y_valid.append(measurement)
-            
-        yield(np.array(x_valid), np.array(y_valid))
-        
-#gen = validation_data_generator('My_data2', data, batch_size=32)
-
-#gen_data = next(gen)
-#print(gen_data[1])
-
-
-def early_stop():
-    early_stop = EarlyStopping(monitor='val_loss', mode='min', verbose=1, patience=2, min_delta=0.1)
-    
-    return early_stop
 
 def build_model(debugging=True):
     if not debugging:
@@ -299,10 +256,8 @@ def main():
     dir_name = 'data'
     
     my_data = load_data(dir_name)
-    #print(len(my_data))
     steer_angles = extract_steer(my_data)
     new_data =  even_dist(my_data, steer_angles)
-    #pythonprint(len(new_data))
     
     train_data_gen = train_data_generator(dir_name, new_data, batch_size, val_data=False)
     validation_data_gen = train_data_generator(dir_name, new_data, batch_size, val_data=True)
